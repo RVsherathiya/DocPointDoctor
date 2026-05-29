@@ -1,0 +1,375 @@
+/* Doctor Portal Dashboard Screen Styles */
+
+.dashboard-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.welcome-text h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--primary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Statistics Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.stat-card.today::before { background-color: var(--primary-color); }
+.stat-card.upcoming::before { background-color: var(--secondary-color); }
+.stat-card.completed::before { background-color: var(--success-color); }
+.stat-card.patients::before { background-color: var(--accent-color); }
+.stat-card.earnings::before { background-color: #EAB308; }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-val {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card.today .stat-icon-wrapper { background-color: rgba(10, 132, 255, 0.1); color: var(--primary-color); }
+.stat-card.upcoming .stat-icon-wrapper { background-color: rgba(90, 200, 250, 0.1); color: var(--secondary-color); }
+.stat-card.completed .stat-icon-wrapper { background-color: rgba(52, 199, 89, 0.1); color: var(--success-color); }
+.stat-card.patients .stat-icon-wrapper { background-color: rgba(88, 86, 214, 0.1); color: var(--accent-color); }
+.stat-card.earnings .stat-icon-wrapper { background-color: rgba(234, 179, 8, 0.1); color: #EAB308; }
+
+/* Dashboard Content Grid */
+.dashboard-layout-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.widget-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.widget-title-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.widget-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Revenue Chart Styles */
+.chart-toggle-group {
+  display: flex;
+  background-color: var(--bg-light);
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border);
+}
+
+.chart-toggle-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  color: var(--text-muted);
+}
+
+.chart-toggle-btn.active {
+  background-color: var(--card-background);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.svg-chart-container {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  margin-top: 16px;
+}
+
+.chart-tooltip {
+  position: absolute;
+  background-color: var(--black-color);
+  color: var(--white-color);
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  pointer-events: none;
+  box-shadow: var(--shadow-lg);
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+/* Quick Actions Grid */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius-md);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.25s ease;
+}
+
+.quick-action-btn:hover {
+  background-color: var(--card-background);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-action-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.quick-action-btn:hover svg {
+  transform: translateY(-2px);
+}
+
+/* Notifications List */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--bg-light);
+  transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+  border-color: var(--primary-color);
+  background-color: var(--card-background);
+}
+
+.noti-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.noti-icon-box.booking { background-color: rgba(10, 132, 255, 0.1); color: var(--primary-color); }
+.noti-icon-box.payment { background-color: rgba(52, 199, 89, 0.1); color: var(--success-color); }
+.noti-icon-box.cancelled { background-color: rgba(255, 59, 48, 0.1); color: var(--danger-color); }
+
+.noti-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.noti-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.noti-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.noti-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+/* Appointments Table styling */
+.appointments-table-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.appt-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.appt-type-badge.video {
+  background-color: rgba(10, 132, 255, 0.12);
+  color: var(--primary-color);
+}
+
+.appt-type-badge.in-clinic {
+  background-color: rgba(88, 86, 214, 0.12);
+  color: var(--accent-color);
+}
+
+.consult-btn {
+  background-color: var(--success-color);
+  color: var(--white-color);
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(52, 199, 89, 0.2);
+}
+
+.consult-btn:hover {
+  background-color: #2fb551;
+  transform: translateY(-1px);
+}
+
+.consult-btn:active {
+  transform: translateY(0);
+}
+
+/* Tooltip dot pulsing */
+.pulsing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--success-color);
+  box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+  animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(52, 199, 89, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+  }
+}

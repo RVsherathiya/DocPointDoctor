@@ -1,0 +1,631 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background image with overlay and animations */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(135deg, rgba(248, 249, 252, 0.75) 0%, rgba(248, 249, 252, 0.9) 100%), url('/doctor_portal_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  animation: bgZoomPan 25s ease-in-out infinite;
+  transition: background-image var(--transition-speed) ease;
+}
+
+[data-theme='dark'] .login-container::before {
+  background-image: linear-gradient(135deg, rgba(11, 13, 19, 0.85) 0%, rgba(11, 13, 19, 0.95) 100%), url('/doctor_portal_bg.png');
+}
+
+/* Background Glowing Orbs for Premium Visuals */
+.login-bg-orb-1, .login-bg-orb-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.login-bg-orb-1 {
+  width: 350px;
+  height: 350px;
+  background: var(--primary-color);
+  top: -50px;
+  left: -50px;
+  animation: float-orb-1 15s ease-in-out infinite;
+}
+
+.login-bg-orb-2 {
+  width: 450px;
+  height: 450px;
+  background: var(--accent-color);
+  bottom: -100px;
+  right: -100px;
+  animation: float-orb-2 20s ease-in-out infinite;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 40px -10px rgba(10, 12, 16, 0.15);
+  border-radius: var(--border-radius-xl);
+  padding: 40px 32px;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+[data-theme='dark'] .login-card {
+  background: rgba(22, 25, 34, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes bgZoomPan {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate(-1%, 0.5%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+@keyframes float-orb-1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -20px) scale(1.1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes float-orb-2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50px, 30px) scale(1.15);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.login-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.login-logo {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.login-logo span {
+  color: var(--primary-color);
+}
+
+.login-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(10, 132, 255, 0.12);
+  color: var(--primary-color);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.login-tabs {
+  display: flex;
+  background: var(--bg-light);
+  border-radius: var(--border-radius-md);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.login-tab {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.login-tab.active {
+  background: var(--card-background);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.phone-input-row {
+  display: flex;
+  gap: 12px;
+}
+
+.country-code-select {
+  width: 95px;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--card-background);
+  color: var(--text);
+  padding: 0 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+}
+
+.country-code-select:focus {
+  border-color: var(--primary-color);
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-muted);
+}
+
+.remember-me input {
+  cursor: pointer;
+  accent-color: var(--primary-color);
+  width: 16px;
+  height: 16px;
+}
+
+.forgot-password-link {
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-btn {
+  width: 100%;
+  height: 48px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+.login-lang-select {
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border);
+  background-color: var(--bg-light);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.login-lang-select:hover {
+  border-color: var(--primary-color);
+}
+
+/* Password Input with Eye Icon */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper .form-control {
+  padding-right: 48px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  color: var(--text);
+}
+
+/* OTP Code Input Boxes */
+.otp-input-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.otp-box {
+  width: 50px;
+  height: 54px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 1.5px solid var(--border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--card-background);
+  color: var(--text);
+  outline: none;
+  transition: all var(--transition-speed) ease;
+}
+
+.otp-box:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
+
+.otp-box.filled {
+  border-color: var(--primary-color);
+  background-color: rgba(10, 132, 255, 0.03);
+}
+
+.otp-timer-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+.otp-timer-text span {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.resend-row {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+.resend-btn {
+  color: var(--primary-color);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resend-btn:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Dev Banner */
+.dev-banner {
+  background: rgba(255, 149, 0, 0.1);
+  border: 1px dashed var(--warning-color);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+
+.dev-banner-header {
+  color: var(--warning-color);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.dev-code-box {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: var(--bg-light);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  margin-top: 4px;
+  color: var(--text);
+}
+
+/* Response message block */
+.response-message {
+  padding: 12px 16px;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.response-message.success {
+  background-color: rgba(52, 199, 89, 0.1);
+  border: 1px solid var(--success-color);
+  color: var(--success-color);
+}
+
+.response-message.error {
+  background-color: rgba(255, 59, 48, 0.1);
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+}
+
+/* Screen transition adjustments */
+.login-footer-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.login-footer-link span {
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 32px 16px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  
+  .otp-box {
+    width: 42px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+}
+
+/* Custom Language Dropdown */
+.custom-lang-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.lang-dropdown-btn:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+}
+
+.lang-btn-globe {
+  color: var(--primary-color);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 6px 0;
+  list-style: none;
+  z-index: 1000;
+  min-width: 140px;
+  animation: fadeIn 0.15s ease forwards;
+}
+
+[dir='rtl'] .lang-dropdown-menu {
+  right: auto;
+  left: 0;
+}
+
+.lang-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.lang-dropdown-item:hover {
+  background-color: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.lang-dropdown-item.active {
+  background-color: rgba(10, 132, 255, 0.08);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.lang-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.lang-name {
+  white-space: nowrap;
+}
+
+/* Custom Country Dropdown */
+.custom-country-dropdown {
+  position: relative;
+  width: 95px;
+}
+
+.country-dropdown-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--card-background);
+  color: var(--text);
+  padding: 0 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.country-dropdown-btn:hover,
+.custom-country-dropdown.open .country-dropdown-btn {
+  border-color: var(--primary-color);
+}
+
+.country-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 130px;
+  margin-top: 6px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 6px 0;
+  list-style: none;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease forwards;
+}
+
+[dir='rtl'] .country-dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+.country-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.country-dropdown-item:hover {
+  background-color: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.country-dropdown-item.active {
+  background-color: rgba(10, 132, 255, 0.08);
+  color: var(--primary-color);
+  font-weight: 600;
+}
