@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { User, Briefcase, Building, ChevronRight, ChevronLeft, Upload, LogOut } from 'lucide-react';
+import { User, Briefcase, Building, ChevronRight, ChevronLeft, Upload, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../services/AuthContext';
 import { useToast } from '../services/ToastContext';
 import FullScreenLoader from '../components/FullScreenLoader';
@@ -24,6 +24,43 @@ export const ProfileSetupScreen: React.FC = () => {
   const [address, setAddress] = useState('');
 
   const [specialization, setSpecialization] = useState('');
+  const [categoriesList, setCategoriesList] = useState<any[]>([]);
+  const [isSpecOpen, setIsSpecOpen] = useState(false);
+
+  const getCategoryName = (name: string) => {
+    const cleanKey = name.toLowerCase().replace(/\s+/g, '_');
+    const translationPath = `categories.list.${cleanKey}`;
+    const translated = t(translationPath);
+    if (translated === translationPath) {
+      return name;
+    }
+    return translated;
+  };
+  const specDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/categories');
+        if (response.data?.status === 'success') {
+          setCategoriesList(response.data.data.categories || []);
+        }
+      } catch (err) {
+        console.error('Failed to load categories for doctor setup dropdown:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (specDropdownRef.current && !specDropdownRef.current.contains(event.target as Node)) {
+        setIsSpecOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const [experience, setExperience] = useState('');
   const [qualification, setQualification] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
@@ -324,17 +361,46 @@ export const ProfileSetupScreen: React.FC = () => {
               {/* Specialization */}
               <div className="form-group">
                 <label className="form-label">{t('profile.specialization_label', 'Medical Specialization')}</label>
-                <input
-                  type="text"
-                  className={`form-control ${errors.specialization ? 'error' : ''}`}
-                  placeholder={t('profile.specialization_placeholder', 'e.g. Cardiologist, Dermatologist')}
-                  value={specialization}
-                  onChange={(e) => {
-                    setSpecialization(e.target.value);
-                    if (errors.specialization) setErrors(prev => ({ ...prev, specialization: '' }));
-                  }}
-                  autoComplete="off"
-                />
+                <div className={`custom-select-dropdown ${isSpecOpen ? 'open' : ''}`} ref={specDropdownRef}>
+                  <button
+                    type="button"
+                    className="select-dropdown-btn"
+                    onClick={() => !isLoading && setIsSpecOpen(!isSpecOpen)}
+                    disabled={isLoading}
+                  >
+                     <span>
+                       {specialization ? getCategoryName(specialization) : t('profile.select_specialization_placeholder', 'Select Specialization')}
+                     </span>
+                    <ChevronDown size={18} className="chevron-icon" />
+                  </button>
+                  {isSpecOpen && (
+                    <ul className="select-dropdown-menu">
+                      <li
+                        className={`select-dropdown-item ${specialization === '' ? 'active' : ''}`}
+                        onClick={() => {
+                          setSpecialization('');
+                          setIsSpecOpen(false);
+                          if (errors.specialization) setErrors(prev => ({ ...prev, specialization: '' }));
+                        }}
+                      >
+                        <span>{t('profile.select_specialization_placeholder', 'Select Specialization')}</span>
+                      </li>
+                      {categoriesList.map((cat: any) => (
+                        <li
+                          key={cat._id}
+                          className={`select-dropdown-item ${specialization === cat.name ? 'active' : ''}`}
+                          onClick={() => {
+                            setSpecialization(cat.name);
+                            setIsSpecOpen(false);
+                            if (errors.specialization) setErrors(prev => ({ ...prev, specialization: '' }));
+                          }}
+                        >
+                          <span>{getCategoryName(cat.name)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
                 {errors.specialization && <span className="error-text">{t(errors.specialization)}</span>}
               </div>
 

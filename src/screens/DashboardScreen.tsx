@@ -638,7 +638,19 @@ export const DashboardScreen: React.FC = () => {
                 {/* Info Items */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ color: 'var(--text-muted)' }}><UserIcon size={18} /></div>
+                    <div style={{ color: 'var(--text-muted)' }}>
+                      {user.doctorProfile?.profilePhoto ? (
+                        <img 
+                          src={user.doctorProfile.profilePhoto} 
+                          alt="Profile" 
+                          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)' }} 
+                        />
+                      ) : (
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--bg-light)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <UserIcon size={18} />
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>{t('doctor.full_name', 'Full Name')}</div>
                       <div style={{ fontWeight: 600 }}>Dr. {user.name}</div>

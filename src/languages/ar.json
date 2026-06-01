@@ -177,6 +177,15 @@
       "rejected_title": "Verification Auditing Failed",
       "rejected_desc": "Some of the credential uploads provided did not match official medical boards or details were blurry. Please re-upload clean copies of your files.",
       "reupload_btn": "Re-upload Credentials"
+    },
+    "categories": {
+      "list": {
+        "general_physician": "طبيب عام",
+        "dentist": "طبيب أسنان",
+        "cardiologist": "طبيب قلب",
+        "dermatologist": "طبيب جلدية",
+        "pediatrician": "طبيب أطفال"
+      }
     }
   }
 }
