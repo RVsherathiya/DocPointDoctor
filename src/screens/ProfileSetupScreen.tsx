@@ -67,7 +67,12 @@ export const ProfileSetupScreen: React.FC = () => {
 
   const [clinicName, setClinicName] = useState('');
   const [clinicAddress, setClinicAddress] = useState('');
-  const [consultationFee, setConsultationFee] = useState('');
+  const [videoActive, setVideoActive] = useState(true);
+  const [videoFee, setVideoFee] = useState('500');
+  const [clinicActive, setClinicActive] = useState(true);
+  const [clinicFee, setClinicFee] = useState('700');
+  const [chatActive, setChatActive] = useState(true);
+  const [chatFee, setChatFee] = useState('300');
 
   // Field validation errors
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -106,8 +111,13 @@ export const ProfileSetupScreen: React.FC = () => {
     } else if (currentStep === 3) {
       checks.push({ key: 'clinicName',      message: 'profile.clinic_name_required',    fail: !clinicName.trim() });
       checks.push({ key: 'clinicAddress',   message: 'profile.clinic_address_required', fail: !clinicAddress.trim() });
-      checks.push({ key: 'consultationFee', message: 'profile.fee_required',            fail: !consultationFee });
-      checks.push({ key: 'consultationFee', message: 'profile.fee_invalid',             fail: !!consultationFee && Number(consultationFee) < 0 });
+      checks.push({ key: 'consultationTypes', message: 'profile.types_required',        fail: !videoActive && !clinicActive && !chatActive });
+      checks.push({ key: 'videoFee',        message: 'profile.fee_required_for_active', fail: videoActive && !videoFee.trim() });
+      checks.push({ key: 'videoFee',        message: 'profile.fee_invalid_for_active',  fail: videoActive && !!videoFee.trim() && Number(videoFee) < 0 });
+      checks.push({ key: 'clinicFee',       message: 'profile.fee_required_for_active', fail: clinicActive && !clinicFee.trim() });
+      checks.push({ key: 'clinicFee',       message: 'profile.fee_invalid_for_active',  fail: clinicActive && !!clinicFee.trim() && Number(clinicFee) < 0 });
+      checks.push({ key: 'chatFee',         message: 'profile.fee_required_for_active', fail: chatActive && !chatFee.trim() });
+      checks.push({ key: 'chatFee',         message: 'profile.fee_invalid_for_active',  fail: chatActive && !!chatFee.trim() && Number(chatFee) < 0 });
     }
 
     // Find the first failing check
@@ -139,6 +149,8 @@ export const ProfileSetupScreen: React.FC = () => {
 
     setIsLoading(true);
 
+    const primaryFee = videoActive ? Number(videoFee) : (clinicActive ? Number(clinicFee) : (chatActive ? Number(chatFee) : 0));
+
     const payload = {
       profilePhoto,
       gender,
@@ -150,7 +162,12 @@ export const ProfileSetupScreen: React.FC = () => {
       licenseNumber: licenseNumber.trim(),
       clinicName: clinicName.trim(),
       clinicAddress: clinicAddress.trim(),
-      consultationFee: Number(consultationFee),
+      consultationFee: primaryFee,
+      consultationTypes: {
+        video: { active: videoActive, fee: videoActive ? Number(videoFee) : 0 },
+        clinic: { active: clinicActive, fee: clinicActive ? Number(clinicFee) : 0 },
+        chat: { active: chatActive, fee: chatActive ? Number(chatFee) : 0 }
+      }
     };
 
     try {
@@ -494,21 +511,162 @@ export const ProfileSetupScreen: React.FC = () => {
                 {errors.clinicAddress && <span className="error-text">{t(errors.clinicAddress)}</span>}
               </div>
 
-              {/* Consultation Fee */}
+              {/* Consultation Types */}
               <div className="form-group" style={{ marginBottom: '24px' }}>
-                <label className="form-label">{t('profile.fee_label', 'Consultation Fee ($ / ₹)')}</label>
-                <input
-                  type="number"
-                  min="0"
-                  className={`form-control ${errors.consultationFee ? 'error' : ''}`}
-                  placeholder={t('profile.fee_placeholder', 'e.g. 50')}
-                  value={consultationFee}
-                  onChange={(e) => {
-                    setConsultationFee(e.target.value);
-                    if (errors.consultationFee) setErrors(prev => ({ ...prev, consultationFee: '' }));
-                  }}
-                />
-                {errors.consultationFee && <span className="error-text">{t(errors.consultationFee)}</span>}
+                <label className="form-label" style={{ marginBottom: '12px', display: 'block' }}>
+                  {t('profile.consultation_types_label', 'Consultation Types')}
+                </label>
+                
+                {errors.consultationTypes && (
+                  <span className="error-text" style={{ display: 'block', marginBottom: '12px' }}>
+                    {t(errors.consultationTypes)}
+                  </span>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  
+                  {/* Video Consultation */}
+                  <div style={{
+                    border: '1px solid ' + (videoActive ? 'var(--primary-color)' : 'var(--border)'),
+                    borderRadius: 'var(--border-radius-md)',
+                    padding: '16px',
+                    backgroundColor: videoActive ? 'rgba(10, 132, 255, 0.04)' : 'var(--card-background)',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 600, color: 'var(--text)', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={videoActive}
+                        onChange={(e) => {
+                          setVideoActive(e.target.checked);
+                          if (errors.consultationTypes) setErrors(prev => ({ ...prev, consultationTypes: '' }));
+                          if (errors.videoFee) setErrors(prev => ({ ...prev, videoFee: '' }));
+                        }}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--primary-color)' }}
+                      />
+                      <span>{t('profile.video_consultation', 'Video Consultation')}</span>
+                    </label>
+                    
+                    {videoActive && (
+                      <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <label className="form-label" style={{ fontSize: '0.8rem', opacity: 0.85, marginBottom: '2px' }}>
+                          {t('profile.video_fee_label', 'Video Fee')}
+                        </label>
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                          <span style={{ position: 'absolute', left: '14px', color: 'var(--text-muted)', fontWeight: 600 }}>₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            className={`form-control ${errors.videoFee ? 'error' : ''}`}
+                            placeholder="e.g. 500"
+                            value={videoFee}
+                            onChange={(e) => {
+                              setVideoFee(e.target.value);
+                              if (errors.videoFee) setErrors(prev => ({ ...prev, videoFee: '' }));
+                            }}
+                            style={{ paddingLeft: '28px' }}
+                          />
+                        </div>
+                        {errors.videoFee && <span className="error-text" style={{ fontSize: '0.75rem' }}>{t(errors.videoFee)}</span>}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Clinic Visit */}
+                  <div style={{
+                    border: '1px solid ' + (clinicActive ? 'var(--primary-color)' : 'var(--border)'),
+                    borderRadius: 'var(--border-radius-md)',
+                    padding: '16px',
+                    backgroundColor: clinicActive ? 'rgba(10, 132, 255, 0.04)' : 'var(--card-background)',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 600, color: 'var(--text)', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={clinicActive}
+                        onChange={(e) => {
+                          setClinicActive(e.target.checked);
+                          if (errors.consultationTypes) setErrors(prev => ({ ...prev, consultationTypes: '' }));
+                          if (errors.clinicFee) setErrors(prev => ({ ...prev, clinicFee: '' }));
+                        }}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--primary-color)' }}
+                      />
+                      <span>{t('profile.clinic_visit', 'Clinic Visit')}</span>
+                    </label>
+
+                    {clinicActive && (
+                      <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <label className="form-label" style={{ fontSize: '0.8rem', opacity: 0.85, marginBottom: '2px' }}>
+                          {t('profile.clinic_fee_label', 'Clinic Fee')}
+                        </label>
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                          <span style={{ position: 'absolute', left: '14px', color: 'var(--text-muted)', fontWeight: 600 }}>₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            className={`form-control ${errors.clinicFee ? 'error' : ''}`}
+                            placeholder="e.g. 700"
+                            value={clinicFee}
+                            onChange={(e) => {
+                              setClinicFee(e.target.value);
+                              if (errors.clinicFee) setErrors(prev => ({ ...prev, clinicFee: '' }));
+                            }}
+                            style={{ paddingLeft: '28px' }}
+                          />
+                        </div>
+                        {errors.clinicFee && <span className="error-text" style={{ fontSize: '0.75rem' }}>{t(errors.clinicFee)}</span>}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Chat Consultation */}
+                  <div style={{
+                    border: '1px solid ' + (chatActive ? 'var(--primary-color)' : 'var(--border)'),
+                    borderRadius: 'var(--border-radius-md)',
+                    padding: '16px',
+                    backgroundColor: chatActive ? 'rgba(10, 132, 255, 0.04)' : 'var(--card-background)',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 600, color: 'var(--text)', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={chatActive}
+                        onChange={(e) => {
+                          setChatActive(e.target.checked);
+                          if (errors.consultationTypes) setErrors(prev => ({ ...prev, consultationTypes: '' }));
+                          if (errors.chatFee) setErrors(prev => ({ ...prev, chatFee: '' }));
+                        }}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--primary-color)' }}
+                      />
+                      <span>{t('profile.chat_consultation', 'Chat Consultation')}</span>
+                    </label>
+
+                    {chatActive && (
+                      <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <label className="form-label" style={{ fontSize: '0.8rem', opacity: 0.85, marginBottom: '2px' }}>
+                          {t('profile.chat_fee_label', 'Chat Fee')}
+                        </label>
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                          <span style={{ position: 'absolute', left: '14px', color: 'var(--text-muted)', fontWeight: 600 }}>₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            className={`form-control ${errors.chatFee ? 'error' : ''}`}
+                            placeholder="e.g. 300"
+                            value={chatFee}
+                            onChange={(e) => {
+                              setChatFee(e.target.value);
+                              if (errors.chatFee) setErrors(prev => ({ ...prev, chatFee: '' }));
+                            }}
+                            style={{ paddingLeft: '28px' }}
+                          />
+                        </div>
+                        {errors.chatFee && <span className="error-text" style={{ fontSize: '0.75rem' }}>{t(errors.chatFee)}</span>}
+                      </div>
+                    )}
+                  </div>
+
+                </div>
               </div>
             </div>
           )}

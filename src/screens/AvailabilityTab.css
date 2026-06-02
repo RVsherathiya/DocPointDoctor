@@ -1,0 +1,231 @@
+/* AvailabilityTab CSS stylesheet */
+
+.availability-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 28px;
+  align-items: start;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@media (max-width: 1024px) {
+  .availability-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.availability-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+  transition: all var(--transition-speed) ease;
+}
+
+.availability-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.availability-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Weekday Day Cards */
+.days-config-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.day-config-card {
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-md);
+  padding: 16px;
+  background-color: var(--bg-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition-speed) ease;
+}
+
+.day-config-card.active {
+  border-color: var(--primary-color);
+  background-color: var(--card-background);
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.05);
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.day-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.day-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  outline: none;
+  cursor: pointer;
+}
+
+.day-time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.time-select {
+  height: 40px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border);
+  padding: 0 10px;
+  font-size: 0.9rem;
+  color: var(--text);
+  background-color: var(--card-background);
+  outline: none;
+  cursor: pointer;
+}
+
+.time-select:focus {
+  border-color: var(--primary-color);
+}
+
+.time-to-separator {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Slot grid preview styling */
+.slots-preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-md);
+  padding: 12px;
+  background-color: var(--bg-light);
+}
+
+.slot-block {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border);
+  background-color: var(--card-background);
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.slot-block.preview {
+  border-color: var(--primary-color);
+  background-color: rgba(10, 132, 255, 0.05);
+  color: var(--primary-color);
+}
+
+.slot-block.booked {
+  border-color: var(--danger-color);
+  background-color: rgba(255, 59, 48, 0.08);
+  color: var(--danger-color);
+  cursor: not-allowed;
+}
+
+.slot-block.available {
+  border-color: var(--success-color);
+  background-color: rgba(52, 199, 89, 0.08);
+  color: var(--success-color);
+}
+
+.slot-block.available:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Status Indicator Dot */
+.status-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-color.available { background-color: var(--success-color); }
+.legend-color.booked { background-color: var(--danger-color); }
+.legend-color.preview { background-color: var(--primary-color); }
+
+.no-slots-placeholder {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}

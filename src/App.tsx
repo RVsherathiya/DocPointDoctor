@@ -22,7 +22,7 @@ const App: React.FC = () => {
   return (
     <ToastProvider>
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/doctor">
           <Routes>
             {/* Public Authentication Routes */}
             <Route path="/login" element={<LoginScreen />} />

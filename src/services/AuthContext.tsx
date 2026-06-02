@@ -21,6 +21,11 @@ export interface User {
     clinicName?: string;
     clinicAddress?: string;
     consultationFee?: number;
+    consultationTypes?: {
+      video?: { active: boolean; fee: number };
+      clinic?: { active: boolean; fee: number };
+      chat?: { active: boolean; fee: number };
+    };
   };
   createdAt: string;
 }

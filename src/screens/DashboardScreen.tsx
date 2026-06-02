@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import './LoginScreen.css';
 import './DashboardScreen.css';
+import { AvailabilityTab } from './AvailabilityTab';
 
 const LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -41,8 +42,8 @@ export const DashboardScreen: React.FC = () => {
   const { showToast } = useToast();
   const { t, i18n } = useTranslation();
 
-  // Tab State: 'overview' (Dashboard statistics & widgets) or 'profile' (Verified session profile details)
-  const [activeTab, setActiveTab] = useState<'overview' | 'profile'>('overview');
+  // Tab State: 'overview' (Dashboard statistics & widgets), 'profile' (Verified session profile details), or 'availability' (Slot scheduling)
+  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'availability'>('overview');
 
   // Revenue Chart filter: 'weekly' or 'monthly'
   const [revenueFilter, setRevenueFilter] = useState<'weekly' | 'monthly'>('weekly');
@@ -158,7 +159,21 @@ export const DashboardScreen: React.FC = () => {
                 cursor: 'pointer'
               }}
             >
-              Dashboard
+              {t('dashboard.dashboard_title', 'Dashboard')}
+            </button>
+            <button 
+              onClick={() => setActiveTab('availability')}
+              style={{
+                padding: '6px 14px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                borderRadius: 'var(--border-radius-sm)',
+                backgroundColor: activeTab === 'availability' ? 'var(--sidebar-active-bg)' : 'transparent',
+                color: activeTab === 'availability' ? 'var(--primary-color)' : 'var(--text-muted)',
+                cursor: 'pointer'
+              }}
+            >
+              {t('dashboard.availability_settings', 'Availability Settings')}
             </button>
             <button 
               onClick={() => setActiveTab('profile')}
@@ -172,7 +187,7 @@ export const DashboardScreen: React.FC = () => {
                 cursor: 'pointer'
               }}
             >
-              My Workspace Profile
+              {t('dashboard.my_workspace_profile', 'My Workspace Profile')}
             </button>
           </nav>
 
@@ -240,8 +255,7 @@ export const DashboardScreen: React.FC = () => {
         margin: '0 auto',
         width: '100%'
       }}>
-        
-        {activeTab === 'overview' ? (
+        {activeTab === 'overview' && (
           <>
             {/* WELCOME SECTION */}
             <div className="welcome-section">
@@ -541,7 +555,7 @@ export const DashboardScreen: React.FC = () => {
                       <PlusCircle size={22} />
                       <span>New Booking</span>
                     </button>
-                    <button className="quick-action-btn" onClick={() => handleQuickAction('Availability Calendar')}>
+                    <button className="quick-action-btn" onClick={() => setActiveTab('availability')}>
                       <CalendarDays size={22} />
                       <span>Set Availability</span>
                     </button>
@@ -616,7 +630,13 @@ export const DashboardScreen: React.FC = () => {
 
             </div>
           </>
-        ) : (
+        )}
+
+        {activeTab === 'availability' && (
+          <AvailabilityTab />
+        )}
+
+        {activeTab === 'profile' && (
           /* WORKSPACE SESSION DETAILS TAB (Preserving original profile items) */
           <>
             <div style={{ marginBottom: '32px' }}>
