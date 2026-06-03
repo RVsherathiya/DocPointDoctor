@@ -1,26 +1,6 @@
 import axios from 'axios';
 
-// Resolves the API URL dynamically based on the current environment
-const getApiBaseUrl = (): string => {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-
-  const { hostname, port } = window.location;
-
-  // If we are running the local Vite development server (usually port 5173 or similar)
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    if (port !== '5001') {
-      // Connect local frontend dev server to production Render backend
-      return 'https://docpointbackend.onrender.com/api';
-    }
-  }
-
-  // If served directly by the backend (port 5001 local, or production Render), use relative route
-  return '/api';
-};
-
-const API_BASE_URL = getApiBaseUrl();
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
