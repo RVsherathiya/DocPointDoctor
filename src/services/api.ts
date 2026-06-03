@@ -32,8 +32,8 @@ api.interceptors.response.use(
       if (error.response.status === 401) {
         localStorage.removeItem('doctor_token');
         localStorage.removeItem('doctor_user');
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = '/doctor/login';
         }
       }
       
