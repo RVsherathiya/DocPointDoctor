@@ -31,31 +31,31 @@ const App: React.FC = () => {
             <Route path="/verify-otp" element={<OtpVerificationScreen />} />
 
             {/* Protected Routes */}
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <ProtectedRoute>
                   <DashboardScreen />
                 </ProtectedRoute>
               }
             />
-            <Route 
-              path="/profile-setup" 
+            <Route
+              path="/profile-setup"
               element={
                 <ProtectedRoute>
                   <ProfileSetupScreen />
                 </ProtectedRoute>
               }
             />
-            <Route 
-              path="/verification" 
+            <Route
+              path="/verification"
               element={
                 <ProtectedRoute>
                   <VerificationScreen />
                 </ProtectedRoute>
               }
             />
-            
+
             {/* Fallback redirect */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

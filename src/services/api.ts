@@ -1,6 +1,26 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://docpointbackend-1.onrender.com/api';
+// Resolves the API URL dynamically based on the current environment
+const getApiBaseUrl = (): string => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  const { hostname, port } = window.location;
+  const isLocal = hostname === 'localhost' || 
+                  hostname === '127.0.0.1' || 
+                  /^(192\.168\.|10\.|172\.)/.test(hostname);
+
+  if (isLocal) {
+    // If served by the backend (port 5001), use relative path. Otherwise, point to backend port 5001.
+    return port === '5001' ? '/api' : `http://${hostname}:5001/api`;
+  }
+
+  // Production fallback
+  return '/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
