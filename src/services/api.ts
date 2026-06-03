@@ -7,16 +7,16 @@ const getApiBaseUrl = (): string => {
   }
 
   const { hostname, port } = window.location;
-  const isLocal = hostname === 'localhost' || 
-                  hostname === '127.0.0.1' || 
-                  /^(192\.168\.|10\.|172\.)/.test(hostname);
 
-  if (isLocal) {
-    // If served by the backend (port 5001), use relative path. Otherwise, point to backend port 5001.
-    return port === '5001' ? '/api' : `http://${hostname}:5001/api`;
+  // If we are running the local Vite development server (usually port 5173 or similar)
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    if (port !== '5001') {
+      // Connect local frontend dev server to production Render backend
+      return 'https://docpointbackend.onrender.com/api';
+    }
   }
 
-  // Production fallback
+  // If served directly by the backend (port 5001 local, or production Render), use relative route
   return '/api';
 };
 
